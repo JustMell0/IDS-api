@@ -4,6 +4,7 @@ import (
 	"IDS/api/internal/models"
 	"context"
 	"database/sql"
+	"strings"
 )
 
 type RoomTypeService struct {
@@ -29,6 +30,7 @@ func (s *RoomTypeService) GetRoomTypes() ([]models.RoomType, error) {
 		if err := rows.Scan(&room.Type, &room.MaxCapacity, &room.Price); err != nil {
 			return nil, err
 		}
+		room.Type = strings.TrimSpace(room.Type)
 		roomTypes = append(roomTypes, room)
 	}
 
