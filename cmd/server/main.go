@@ -15,7 +15,7 @@ func main() {
 	log.Println("Starting the application")
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Failed to load .env file: ", err)
+		log.Println("Failed to load .env file:", err)
 	}
 	database, err := db.Connect()
 	if err != nil {
