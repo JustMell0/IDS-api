@@ -7,6 +7,7 @@ import (
 	// "IDS/api/internal/handlers"
 	"log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -24,6 +25,14 @@ func main() {
 	defer database.Close()
 
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 	// userHandler := handlers.NewUserHandler(database)
 	roomHandler := handlers.NewRoomHandler(database)
 	roomTypeHandler := handlers.NewRoomTypeHandler(database)
