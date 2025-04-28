@@ -36,12 +36,15 @@ func main() {
 	// userHandler := handlers.NewUserHandler(database)
 	roomHandler := handlers.NewRoomHandler(database)
 	roomTypeHandler := handlers.NewRoomTypeHandler(database)
-	// reservationHandler := handlers.NewReservationHandler(database)
 	bookingHandler := handlers.NewBookingHandler(database)
+	reservationHandler := handlers.NewReservationHandler(database)
 
 	router.GET("/rooms", roomHandler.GetRooms)
 	router.GET("/roomtypes", roomTypeHandler.GetRoomTypes)
+
 	router.POST("/booking", bookingHandler.CreateBooking)
+
+	router.GET("/reservations", reservationHandler.GetReservations)
 	// router.POST("/users", userHandler.CreateUser)
 	// router.GET("/users/:id", userHandler.GetUser)
 
