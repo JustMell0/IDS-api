@@ -1,0 +1,38 @@
+package handlers
+
+import (
+	"IDS/api/internal/models"
+	"IDS/api/internal/services"
+	"database/sql"
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type BookingHandler struct {
+	service *services.BookingService
+}
+
+func NewBookingHandler(db *sql.DB) *BookingHandler {
+	return &BookingHandler{
+		service: services.NewBookingService(db),
+	}
+}
+
+func (h *BookingHandler) CreateBooking(c *gin.Context) {
+	reservation := models.Booking{}
+	if err := c.ShouldBindJSON(&reservation); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid booking data"})
+		return
+	}
+
+	id, err := h.service.CreateBooking(reservation)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create booking"})
+		log.Println(err)
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"id": id})
+}
