@@ -1,2 +1,4 @@
 .env
 Dockerfile
+.DS_Store
+DB_struct.sql

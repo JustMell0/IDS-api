@@ -22,7 +22,7 @@ func (s *BookingService) CreateBooking(b models.Booking) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer tx.Rollback() // This will be a no-op if tx.Commit() is called
+	defer tx.Rollback()
 
 	// Insert guest record
 	var guestID int
@@ -40,9 +40,9 @@ func (s *BookingService) CreateBooking(b models.Booking) (int, error) {
 	log.Println("Room Got:", roomNum)
 	// Insert reservation record using the same transaction
 	_, err = tx.ExecContext(context.Background(),
-		`INSERT INTO Reservation (guest_id, room_num)
-         VALUES (:1, :2)`,
-		guestID, roomNum)
+		`INSERT INTO Reservation (guest_id, room_num, check_in_date, check_out_date)
+         VALUES (:1, :2, :3, :4)`,
+		guestID, roomNum, b.CheckInDate, b.CheckOutDate)
 	if err != nil {
 		return 0, err
 	}
