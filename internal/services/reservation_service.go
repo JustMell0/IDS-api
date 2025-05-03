@@ -37,3 +37,26 @@ func (s *ReservationService) GetReservations() ([]models.Reservation, error) {
 	}
 	return reservations, nil
 }
+
+func (s *ReservationService) GetUserReservations(id int) ([]models.UserReservation, error) {
+	ctx := context.Background()
+	rows, err := s.db.QueryContext(ctx, "SELECT reservation_id, guest_id, room_num, room_type, check_in_date, check_out_date, total_price, status FROM Reservation NATURAL JOIN Room WHERE guest_id = :1", id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var reservations []models.UserReservation
+	for rows.Next() {
+		var reservation models.UserReservation
+		if err := rows.Scan(&reservation.ID, &reservation.GuestID,
+			&reservation.Room.RoomNum, &reservation.Room.Type, &reservation.CheckInDate,
+			&reservation.CheckOutDate, &reservation.TotalPrice,
+			&reservation.Status); err != nil {
+			return nil, err
+		}
+		reservation.Status = strings.TrimSpace(reservation.Status)
+		reservations = append(reservations, reservation)
+	}
+	return reservations, nil
+}

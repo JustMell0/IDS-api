@@ -48,6 +48,8 @@ func main() {
 	router.GET("/reservations", reservationHandler.GetReservations)
 
 	router.POST("/login", loginHandler.Login)
+
+	router.GET("/users/:id/reservations", reservationHandler.GetUserReservations)
 	// router.POST("/users", userHandler.CreateUser)
 	// router.GET("/users/:id", userHandler.GetUser)
 

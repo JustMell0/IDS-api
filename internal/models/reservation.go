@@ -9,3 +9,13 @@ type Reservation struct {
 	TotalPrice   int    `json:"total_price"`
 	Status       string `json:"status"`
 }
+
+type UserReservation struct {
+	ID           int    `json:"reservation_id"`
+	GuestID      int    `json:"guest_id"`
+	Room         Room   `json:"room"`
+	CheckInDate  string `json:"check_in_date"`
+	CheckOutDate string `json:"check_out_date"`
+	TotalPrice   int    `json:"total_price"`
+	Status       string `json:"status"`
+}

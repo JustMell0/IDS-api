@@ -1,6 +1,6 @@
 package models
 
 type Room struct {
-	Num  int
-	Type string
+	RoomNum int
+	Type    string
 }

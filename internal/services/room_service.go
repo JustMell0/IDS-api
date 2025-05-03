@@ -24,7 +24,7 @@ func (s *RoomService) GetRooms() ([]models.Room, error) {
 	var rooms []models.Room
 	for rows.Next() {
 		var room models.Room
-		if err := rows.Scan(&room.Num, &room.Type); err != nil {
+		if err := rows.Scan(&room.RoomNum, &room.Type); err != nil {
 			return nil, err
 		}
 		rooms = append(rooms, room)
