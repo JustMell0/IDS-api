@@ -57,6 +57,8 @@ func main() {
 	router.DELETE("/concierge/requests/:id", conciergeHandler.RejectRequest)
 
 	router.GET("/users/:id/requests", userHandler.GetUserRequests)
+	router.POST("/users/:id/requests", userHandler.NewRequest)
+
 	// router.POST("/users", userHandler.CreateUser)
 	// router.GET("/users/:id", userHandler.GetUser)
 

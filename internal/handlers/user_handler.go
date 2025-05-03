@@ -42,3 +42,31 @@ func (h *UserHandler) GetUserRequests(c *gin.Context) {
 
 	c.JSON(http.StatusOK, requests)
 }
+
+type SID struct {
+	ID int `json:"service_id"`
+}
+
+func (h *UserHandler) NewRequest(c *gin.Context) {
+	gID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		log.Println("ERROR:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+	sID := SID{}
+	if err := c.ShouldBindJSON(&sID); err != nil {
+		log.Println("ERROR:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid service ID"})
+		return
+	}
+	requestID, err := h.service.NewRequest(gID, sID.ID)
+	if err != nil {
+		log.Println("ERROR:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create request"})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{
+		"request_id": requestID,
+	})
+}

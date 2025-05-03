@@ -34,3 +34,16 @@ func (s *UserService) GetUserRequests(id int) ([]models.UserRequest, error) {
 	}
 	return requests, nil
 }
+
+func (s *UserService) NewRequest(guestID int, serviceID int) (int, error) {
+	ctx := context.Background()
+	var requestID int
+	_, err := s.db.ExecContext(ctx,
+		`INSERT INTO Request (guest_id, service_id)
+			VALUES (:1, :2)
+			RETURNING request_id INTO :3`, guestID, serviceID, sql.Out{Dest: &requestID})
+	if err != nil {
+		return 0, err
+	}
+	return requestID, nil
+}
