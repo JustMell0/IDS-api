@@ -33,13 +33,13 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	// userHandler := handlers.NewUserHandler(database)
 	roomHandler := handlers.NewRoomHandler(database)
 	roomTypeHandler := handlers.NewRoomTypeHandler(database)
 	bookingHandler := handlers.NewBookingHandler(database)
 	reservationHandler := handlers.NewReservationHandler(database)
 	loginHandler := handlers.NewLoginHandler(database)
 	conciergeHandler := handlers.NewConciergeHandler(database)
+	userHandler := handlers.NewUserHandler(database)
 
 	router.GET("/rooms", roomHandler.GetRooms)
 	router.GET("/roomtypes", roomTypeHandler.GetRoomTypes)
@@ -55,6 +55,8 @@ func main() {
 	router.GET("/concierge/requests", conciergeHandler.GetRequests)
 	router.POST("/concierge/requests/:id", conciergeHandler.AcceptRequest)
 	router.DELETE("/concierge/requests/:id", conciergeHandler.RejectRequest)
+
+	router.GET("/users/:id/requests", userHandler.GetUserRequests)
 	// router.POST("/users", userHandler.CreateUser)
 	// router.GET("/users/:id", userHandler.GetUser)
 

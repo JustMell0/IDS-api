@@ -27,12 +27,12 @@ func (h *LoginHandler) Login(c *gin.Context) {
 		return
 	}
 
-	id, err := h.service.Login(login)
+	id, err := h.service.Login(login.PhoneNum)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to login"})
 		log.Println(err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"id": id})
+	c.JSON(http.StatusFound, gin.H{"id": id})
 }

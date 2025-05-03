@@ -1,0 +1,36 @@
+package services
+
+import (
+	"IDS/api/internal/models"
+	"context"
+	"database/sql"
+)
+
+type UserService struct {
+	db *sql.DB
+}
+
+func NewUserService(db *sql.DB) *UserService {
+	return &UserService{db: db}
+}
+
+func (s *UserService) GetUserRequests(id int) ([]models.UserRequest, error) {
+	ctx := context.Background()
+	// TODO: add WHERE time is start of UNIX epoch
+	rows, err := s.db.QueryContext(ctx, "SELECT request_id, service_id, s_name, price FROM Request NATURAL JOIN Guest NATURAL JOIN Service WHERE guest_id = :1", id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var requests []models.UserRequest
+	for rows.Next() {
+		var request models.UserRequest
+		if err := rows.Scan(&request.RequestID, &request.ServiceID,
+			&request.ServiceName, &request.Price); err != nil {
+			return nil, err
+		}
+		requests = append(requests, request)
+	}
+	return requests, nil
+}
