@@ -53,6 +53,8 @@ func main() {
 	router.GET("/users/:id/reservations", reservationHandler.GetUserReservations)
 
 	router.GET("/concierge/requests", conciergeHandler.GetRequests)
+	router.POST("/concierge/requests/:id", conciergeHandler.AcceptRequest)
+	router.DELETE("/concierge/requests/:id", conciergeHandler.RejectRequest)
 	// router.POST("/users", userHandler.CreateUser)
 	// router.GET("/users/:id", userHandler.GetUser)
 

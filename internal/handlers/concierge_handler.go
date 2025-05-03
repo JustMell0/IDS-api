@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,4 +29,40 @@ func (h *ConciergeHandler) GetRequests(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, requests)
+}
+
+func (h *ConciergeHandler) AcceptRequest(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		log.Println("ERROR:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request ID"})
+		return
+	}
+
+	err = h.service.AcceptRequest(id)
+	if err != nil {
+		log.Println("ERROR:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to accept request"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Request successfully accepted"})
+}
+
+func (h *ConciergeHandler) RejectRequest(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		log.Println("ERROR:", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request ID"})
+		return
+	}
+
+	err = h.service.RejectRequest(id)
+	if err != nil {
+		log.Println("ERROR:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to reject request"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Request successfully rejected"})
 }
