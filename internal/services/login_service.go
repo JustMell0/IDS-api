@@ -20,7 +20,7 @@ func (s *LoginService) Login(l models.Login) (int, error) {
 	var guestID int
 	if err := row.Scan(&guestID); err != nil {
 		if err == sql.ErrNoRows {
-			return 0, nil // No guest found
+			return 0, err // No guest found
 		}
 		return 0, err
 	}
