@@ -1,6 +1,7 @@
 package services
 
 import (
+	"IDS/api/internal/models"
 	"context"
 	"database/sql"
 )
@@ -13,15 +14,12 @@ func NewLoginService(db *sql.DB) *LoginService {
 	return &LoginService{db: db}
 }
 
-func (s *LoginService) Login(id int) (int, error) {
+func (s *LoginService) Login(id int) (models.Guest, error) {
 	ctx := context.Background()
-	row := s.db.QueryRowContext(ctx, "SELECT guest_id FROM Guest WHERE phone_num = :1", id)
-	var guestID int
-	if err := row.Scan(&guestID); err != nil {
-		if err == sql.ErrNoRows {
-			return 0, err // No guest found
-		}
-		return 0, err
+	row := s.db.QueryRowContext(ctx, "SELECT guest_id, surname, g_name, phone_num FROM Guest WHERE phone_num = :1", id)
+	var guest models.Guest
+	if err := row.Scan(&guest.ID, &guest.Surname, &guest.Name, &guest.PhoneNum); err != nil {
+		return guest, err
 	}
-	return guestID, nil
+	return guest, nil
 }
