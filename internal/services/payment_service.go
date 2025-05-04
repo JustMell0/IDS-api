@@ -37,3 +37,21 @@ func (s *PaymentService) GetUnconfirmedPayments() ([]models.UnconfirmedPayment, 
 	}
 	return payments, nil
 }
+
+func (s *PaymentService) ConfirmPayment(id int) error {
+	ctx := context.Background()
+	_, err := s.db.ExecContext(ctx, "UPDATE Payment SET status = 'Confirmed' WHERE payment_id = :1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *PaymentService) RejectPayment(id int) error {
+	ctx := context.Background()
+	_, err := s.db.ExecContext(ctx, "DELETE FROM Payment WHERE payment_id = :1", id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

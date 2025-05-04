@@ -63,6 +63,8 @@ func main() {
 	router.POST("/users/:id/requests", userHandler.NewRequest)
 
 	router.GET("/payments/unconfirmed", paymentHandler.GetUnconfirmedPayments)
+	router.POST("/payments/:id", paymentHandler.ConfirmPayment)
+	router.DELETE("/payments/:id", paymentHandler.RejectPayment)
 
 	// router.POST("/users", userHandler.CreateUser)
 	// router.GET("/users/:id", userHandler.GetUser)
