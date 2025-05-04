@@ -47,3 +47,41 @@ func (s *ConciergeService) RejectRequest(requestID int) error {
 	_, err := s.db.ExecContext(ctx, "DELETE FROM Request WHERE request_id = :1", requestID)
 	return err
 }
+
+func (s *ConciergeService) GetInHotelServices() ([]models.InHotelService, error) {
+	ctx := context.Background()
+	rows, err := s.db.QueryContext(ctx, "SELECT service_id, price, s_name, daily FROM Service NATURAL JOIN InHotelService")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var services []models.InHotelService
+	for rows.Next() {
+		var service models.InHotelService
+		if err := rows.Scan(&service.ID, &service.Price, &service.Name, &service.Daily); err != nil {
+			return nil, err
+		}
+		services = append(services, service)
+	}
+	return services, nil
+}
+
+func (s *ConciergeService) GetTourServices() ([]models.TourService, error) {
+	ctx := context.Background()
+	rows, err := s.db.QueryContext(ctx, "SELECT service_id, price, s_name, duration, location, transfer FROM Service NATURAL JOIN TourService")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var services []models.TourService
+	for rows.Next() {
+		var service models.TourService
+		if err := rows.Scan(&service.ID, &service.Price, &service.Name, &service.Duration, &service.Location, &service.Transfer); err != nil {
+			return nil, err
+		}
+		services = append(services, service)
+	}
+	return services, nil
+}
