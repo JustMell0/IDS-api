@@ -38,6 +38,12 @@ func (s *ReservationService) GetReservations() ([]models.Reservation, error) {
 	return reservations, nil
 }
 
+func (s *ReservationService) EditReservation(guestID int, checkInDate string, checkOutDate string) error {
+	ctx := context.Background()
+	_, err := s.db.ExecContext(ctx, "UPDATE Reservation SET check_in_date = :1, check_out_date = :2 WHERE guest_id = :3", checkInDate, checkOutDate, guestID)
+	return err
+}
+
 func (s *ReservationService) GetUserReservations(id int) ([]models.UserReservation, error) {
 	ctx := context.Background()
 	rows, err := s.db.QueryContext(ctx, "SELECT reservation_id, guest_id, room_num, room_type, check_in_date, check_out_date, total_price, status FROM Reservation NATURAL JOIN Room WHERE guest_id = :1", id)

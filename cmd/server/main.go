@@ -48,6 +48,7 @@ func main() {
 	router.POST("/booking", bookingHandler.CreateBooking)
 
 	router.GET("/reservations", reservationHandler.GetReservations)
+	router.POST("/reservations/:id", reservationHandler.EditReservation)
 
 	router.POST("/login", loginHandler.Login)
 
