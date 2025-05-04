@@ -27,12 +27,12 @@ func (h *BookingHandler) CreateBooking(c *gin.Context) {
 		return
 	}
 
-	id, err := h.service.CreateBooking(booking)
+	guest, err := h.service.CreateBooking(booking)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create booking"})
 		log.Println(err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"id": id})
+	c.JSON(http.StatusCreated, guest)
 }
